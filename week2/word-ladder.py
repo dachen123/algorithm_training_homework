@@ -91,5 +91,34 @@ class Solution:
             step += 1
         return 0  #找不到要返回0 
 
+#双向bfs解法
+#import string
+#print(string.ascii_lowercase)
+import string
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        if endWord not in wordList:
+            return 0
+        front = {beginWord}
+        back = {endWord}
+        wordList = set(wordList) #这句一定要加上!!!!!,list和set的查找效率大概是几十倍的差距
+        dis = 1
+        while front:
+            next_front = set()
+            for word in front:
+                for i in range(len(word)):
+                    for c in string.ascii_lowercase:
+                        if c != word[i]:
+                            new_word = word[:i] + c + word[i+1:] #加1不要忘了
+                            if new_word in back:
+                                return dis + 1
+                            if new_word in wordList:
+                                next_front.add(new_word)
+                                wordList.remove(new_word)
+            dis += 1
+            front = next_front
+            if len(front) > len(back):
+                front,back = back,front                           
+        return 0
 
 
